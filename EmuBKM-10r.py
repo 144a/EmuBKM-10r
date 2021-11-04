@@ -290,7 +290,7 @@ ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' f
 #'/dev/ttyUSB0'
 
 # Open Port
-#ser.open()
+ser.open()
 
 inp = ""
 
