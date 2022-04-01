@@ -1,5 +1,7 @@
 import serial
 import io
+import time
+
 
 # Sony BKM-10r Serial Protocol
 # Link to info: https://pastebin.com/aTUWf33J
@@ -67,6 +69,102 @@ CONTRAST_ENC = [0x44, 0x00, 0x4] # Contrast Knob
 
 print("Sony BKM-10r Emulated Controller")
 print("Type 'help' for Info and 'exit' to Quit")
+
+#--------------------Custom Functions---------------------
+# These are made using the byte commands implemented above
+# These are NOT standard to the BKM series of controllers
+
+# Function to enter text whenever applicable
+def writeText():
+	dif = input("Input Text: ")
+	for s in dif:
+		dir = 1
+		charstr = " abcdefghijklmnopqrstuvwxyz0123456789():;.-+/&"
+		n = charstr.index(s.lower())
+		if n > len(charstr) // 2:
+			dir = -1
+			n = len(charstr) - n + 1
+		for i in range(n):
+			if dir == 1:
+				ser.write(bytearray(UP))
+			else:
+				ser.write(bytearray(DOWN))
+			ser.flush()
+			time.sleep(.02)
+		ser.write(bytearray(ENTER))
+		ser.flush()
+		time.sleep(.08)
+	ser.write(bytearray(ENTER))
+	ser.flush()
+
+def updateChannelName():
+	# Call for Menu
+	ser.write(bytearray(MENU))
+	ser.flush()
+	time.sleep(0.05)
+
+	# Select Channel Input
+	ser.write(bytearray(ENTER))
+	ser.flush()
+	time.sleep(0.1)
+
+	# Get channel to change name
+	num = int(input("Channel Number to Update: "))
+	if n == "Num0":
+		ser.write(bytearray(NUM0))
+	elif inp_str == "Num1":
+		ser.write(bytearray(NUM1))
+	elif inp_str == "Num2":
+		ser.write(bytearray(NUM2))
+	elif inp_str == "Num3":
+		ser.write(bytearray(NUM3))
+	elif inp_str == "Num4":
+		ser.write(bytearray(NUM4))
+	elif inp_str == "Num5":
+		ser.write(bytearray(NUM5))
+	elif inp_str == "Num6":
+		ser.write(bytearray(NUM6))
+	elif inp_str == "Num7":
+		ser.write(bytearray(NUM7))
+	elif inp_str == "Num8":
+		ser.write(bytearray(NUM8))
+	elif inp_str == "Num9":
+		ser.write(bytearray(NUM9))
+	ser.flush()
+	time.sleep(1)
+
+	# Move to Name function
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+	ser.write(bytearray(DOWN))
+	ser.flush()
+	time.sleep(0.05)
+
+	ser.write(bytearray(Enter))
+	ser.flush()
+	time.sleep(0.1)
+
+	ser.write(bytearray(UP))
+	ser.flush()
+	time.sleep(0.05)
+
+	writeText()
+
+
+
 
 # Writes bytes for each command
 def writeCommandBytes(inp_str):
@@ -277,20 +375,29 @@ def writeCommandBytes(inp_str):
 		ser.write(bytearray(ISW))
 		return 1
 
+	if inp_str == "Write":
+		writeText()
+		return 1
+
+
+
 	# If the command does not fit any currently supported command, return 0
 	return 0
+
+
+
 
 
 # Open Serial Port
 ser = serial.Serial()
 ser.baudrate = 38400
 
-ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
+#ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
 
-#'/dev/ttyUSB0'
+ser.port = '/dev/ttyUSB0'
 
 # Open Port
-#ser.open()
+ser.open()
 
 inp = ""
 
@@ -298,6 +405,7 @@ while inp != "exit":
 	inp = input(">") # Take user Input
 	if inp == "help":
 		# Create help command response
+                break
 	if inp != "exit":
 		ret = writeCommandBytes(inp) # Parse Input and send the proper write() commands
 		if ret == 1:
