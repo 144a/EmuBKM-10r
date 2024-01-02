@@ -12,316 +12,194 @@ import time
 # LIST OF BYTE COMMANDS
 
 # -------BANKS---------
+COMMANDS = {
+	"IEN":[0x49, 0x45, 0x4E], # Encoders
+	"ISW":[0x49, 0x53, 0x57], # Switches
+	"ILE":[0x49, 0x4c, 0x45], # Leds
+	"ICC":[0x49, 0x43, 0x43], # ??
+	"IMT":[0x49, 0x4d, 0x54], # ??
+	#-----Key Presses------
+	# Format: 0x44 <group> <mask>
+	"SHIFT":[0x44, 0x03, 0x01], # Shift Key
+	"OVERSCAN_16_9":[0x44, 0x03, 0x02], # Overscan / 16:9
+	"HORIZSYNC_SYNC":[0x44, 0x03, 0x04], # Horizontal Sync View / Sync
+	"VERTSYNC_BLUEONLY":[0x44, 0x03, 0x08], # Vertical Sync View / Blue Only
+	"MONO_RED":[0x44, 0x03, 0x10], # Mono / Red Beam
+	"APT_GREEN":[0x44, 0x04, 0x01], # Aperature / Green Beam
+	"COMB_BLUE":[0x44, 0x04, 0x02], # Comb / Blue Beam
+	"F1_F3":[0x44, 0x04, 0x04], # F1 Key / F3 Key
+	"F2_F4":[0x44, 0x04, 0x08], # F2 Key / F4 Key
+	"SAFEAREA_ADDR":[0x44, 0x04, 0x10], # Safe Area / Address
 
-IEN = [0x49, 0x45, 0x4E] # Encoders
-ISW = [0x49, 0x53, 0x57] # Switches
-ILE = [0x49, 0x4c, 0x45] # Leds
-ICC = [0x49, 0x43, 0x43] # ??
-IMT = [0x49, 0x4d, 0x54] # ??
+	"UP":[0x44, 0x02, 0x40], # Up Key
+	"DOWN":[0x44, 0x02, 0x80], # Down Key
+	"MENU":[0x44, 0x02, 0x10], # Menu Key
+	"ENTER":[0x44, 0x02, 0x20], # Enter Key
 
-#-----Key Presses------
+	"PHASE_M":[0x44, 0x02, 0x08], # Phase Manual
+	"CHROMA_M":[0x44, 0x02, 0x04], # Chroma Manual
+	"BRIGHT_M":[0x44, 0x02, 0x02], # Bright Manual
+	"CONTRAST_M":[0x44, 0x02, 0x01], # Contrast Manual
 
-# Format: 0x44 <group> <mask>
+	"NUM0":[0x44, 0x00, 0x01], # Number 0
+	"NUM1":[0x44, 0x00, 0x02], # Number 1
+	"NUM2":[0x44, 0x00, 0x04], # Number 2
+	"NUM3":[0x44, 0x00, 0x08], # Number 3
+	"NUM4":[0x44, 0x00, 0x10], # Number 4
+	"NUM5":[0x44, 0x00, 0x20], # Number 5
+	"NUM6":[0x44, 0x00, 0x40], # Number 6
+	"NUM7":[0x44, 0x00, 0x80], # Number 7
+	"NUM8":[0x44, 0x01, 0x01], # Number 8
+	"NUM9":[0x44, 0x01, 0x02], # Number 9
+	"DEL":[0x44, 0x01, 0x04], # Delete Key
+	"ENT":[0x44, 0x01, 0x08], # Enter Key
 
-SHIFT = [0x44, 0x03, 0x01] # Shift Key
-OVERSCAN_16_9 = [0x44, 0x03, 0x02] # Overscan / 16:9
-HORIZSYNC_SYNC = [0x44, 0x03, 0x04] # Horizontal Sync View / Sync
-VERTSYNC_BLUEONLY = [0x44, 0x03, 0x08] # Vertical Sync View / Blue Only
-MONO_RED = [0x44, 0x03, 0x10] # Mono / Red Beam
-APT_GREEN = [0x44, 0x04, 0x01] # Aperature / Green Beam
-COMB_BLUE = [0x44, 0x04, 0x02] # Comb / Blue Beam
-F1_F3 = [0x44, 0x04, 0x04] # F1 Key / F3 Key
-F2_F4 = [0x44, 0x04, 0x08] # F2 Key / F4 Key
-SAFEAREA_ADDR = [0x44, 0x04, 0x10] # Safe Area / Address
+	"POWER":[0x44, 0x01, 0x10], # Power On/Off
+	"DEGAUSS":[0x44, 0x01, 0x20], # Degauss Button
 
-UP = [0x44, 0x02, 0x40] # Up Key
-DOWN = [0x44, 0x02, 0x80] # Down Key
-MENU = [0x44, 0x02, 0x10] # Menu Key
-ENTER = [0x44, 0x02, 0x20] # Enter Key
+	#-------Encoders-------
+	"PHASE_ENC":[0x44, 0x03, 0x4], # Phase Knob
+	"CHROMA_ENC":[0x44, 0x02, 0x4], # Chroma Knob
+	"BRIGHT_ENC":[0x44, 0x01, 0x04], # Brightness Knob
+	"CONTRAST_ENC":[0x44, 0x00, 0x4], # Contrast Knob
+}
 
-PHASE_M = [0x44, 0x02, 0x08] # Phase Manual
-CHROMA_M = [0x44, 0x02, 0x04] # Chroma Manual
-BRIGHT_M = [0x44, 0x02, 0x02] # Bright Manual
-CONTRAST_M = [0x44, 0x02, 0x01] # Contrast Manual
-
-NUM0 = [0x44, 0x00, 0x01] # Number 0
-NUM1 = [0x44, 0x00, 0x02] # Number 1
-NUM2 = [0x44, 0x00, 0x04] # Number 2
-NUM3 = [0x44, 0x00, 0x08] # Number 3
-NUM4 = [0x44, 0x00, 0x10] # Number 4
-NUM5 = [0x44, 0x00, 0x20] # Number 5
-NUM6 = [0x44, 0x00, 0x40] # Number 6
-NUM7 = [0x44, 0x00, 0x80] # Number 7
-NUM8 = [0x44, 0x01, 0x01] # Number 8
-NUM9 = [0x44, 0x01, 0x02] # Number 9
-DEL = [0x44, 0x01, 0x04] # Delete Key
-ENT = [0x44, 0x01, 0x08] # Enter Key
-
-POWER = [0x44, 0x01, 0x10] # Power On/Off
-DEGAUSS = [0x44, 0x01, 0x20] # Degauss Button
-
-#-------Encoders-------
-PHASE_ENC = [0x44, 0x03, 0x4] # Phase Knob
-CHROMA_ENC = [0x44, 0x02, 0x4] # Chroma Knob
-BRIGHT_ENC = [0x44, 0x01, 0x04] # Brightness Knob
-CONTRAST_ENC = [0x44, 0x00, 0x4] # Contrast Knob
-
-
-print("Sony BKM-10r Emulated Controller")
-print("Type 'help' for Info and 'exit' to Quit")
+HUMAN_READABLE_COMMANDS = {
+	"IEN":["COMMAND", "IEN"],
+	"ISW":["COMMAND", "ISW"],
+	"ILE":["COMMAND", "ILE"],
+	"ICC":["COMMAND", "ICC"],
+	"IMT":["COMMAND", "IMT"],
+	"Shift":["COMMAND", "SHIFT"],
+	"Overscan":["COMMAND", "OVERSCAN_16_9"],
+	"16:9":["COMMAND", "SHIFT", "OVERSCAN_16_9"],
+	"HorizSync":["COMMAND", "HORIZSYNC_SYNC"],
+	"Sync":["COMMAND", "SHIFT", "HORIZSYNC_SYNC"],
+	"VertSync":["COMMAND", "VERTSYNC_BLUEONLY"],
+	"BlueOnly":["COMMAND", "SHIFT", "VERTSYNC_BLUEONLY"],
+	"Mono":["COMMAND", "MONO_RED"],
+	"Red":["COMMAND", "SHIFT", "MONO_RED"],
+	"Aperature":["COMMAND", "APT_GREEN"],
+	"Green":["COMMAND", "SHIFT", "APT_GREEN"],
+	"Comb":["COMMAND", "COMB_BLUE"],
+	"Blue":["COMMAND", "SHIFT", "COMB_BLUE"],
+	"F1":["COMMAND", "F1_F3"],
+	"F3":["COMMAND", "SHIFT", "F1_F3"],
+	"F2":["COMMAND", "F2_F4"],
+	"F4":["COMMAND", "SHIFT", "F2_F4"],
+	"SafeArea":["COMMAND", "SAFEAREA_ADDR"],
+	"Address":["COMMAND", "SHIFT", "SAFEAREA_ADDR"],
+	"Up":["COMMAND", "UP"],
+	"Down":["COMMAND", "DOWN"],
+	"Enter":["COMMAND", "ENTER"],
+	"Menu":["COMMAND", "ISW", "MENU", "ISW"],
+	"Num0":["COMMAND", "NUM0"],
+	"Num1":["COMMAND", "NUM1"],
+	"Num2":["COMMAND", "NUM2"],
+	"Num3":["COMMAND", "NUM3"],
+	"Num4":["COMMAND", "NUM4"],
+	"Num5":["COMMAND", "NUM5"],
+	"Num6":["COMMAND", "NUM6"],
+	"Num7":["COMMAND", "NUM7"],
+	"Num8":["COMMAND", "NUM8"],
+	"Num9":["COMMAND", "NUM9"],
+	"Power":["COMMAND", "ISW", "POWER", "ISW"],
+	"Degauss":["COMMAND", "DEGAUSS"],
+	"PhaseInc":["ENCODER-SUB", "PHASE_ENC"],
+	"ChromaInc":["ENCODER-SUB", "CHROMA_ENC"],
+	"BrightInc":["ENCODER-SUB", "PHASE_ENC"],
+	"ContrastInc":["ENCODER-SUB", "PHASE_ENC"],
+	"UpdateChannelName":["SCRIPT", "CHANNEL_NAME"]
+}
 
 #--------------------Custom Functions---------------------
 # These are made using the byte commands implemented above
 # These are NOT standard to the BKM series of controllers
+
+def writeCommand(command, skipISW=False):
+	""" Sends correct byte array for corresponding command """
+	if skipISW:
+		ser.write(bytearray(COMMANDS["ISW"]))
+	ser.write(bytearray(COMMANDS[command]))
+	ser.flush()
+	if command == "MENU" or command == "Power":	
+		time.sleep(0.50)
+	else:
+		time.sleep(0.025)
+	print(command)
+
+def repeatCommand(command, reps, skipISW=False):
+	""" Repeats COMMANDS N times with a 0.05 delay between """
+	for i in range(reps):
+		writeCommand(command, skipISW)
 
 # Function to enter text whenever applicable
 def writeText():
 	dif = input("Input Text: ")
 	for s in dif:
 		dir = 1
-		charstr = " abcdefghijklmnopqrstuvwxyz0123456789():;.-+/&"
-		n = charstr.index(s.lower())
+		charstr = "abcdefghijklmnopqrstuvwxyz0123456789():;.-+/& "
+		n = charstr.index(s.lower()) + 1
+		
 		if n > len(charstr) // 2:
 			dir = -1
-			n = len(charstr) - n + 1
+			n = len(charstr) - (n - 1)
+		print(n)
 		for i in range(n):
 			if dir == 1:
-				ser.write(bytearray(UP))
+				writeCommand("UP")
 			else:
-				ser.write(bytearray(DOWN))
-			ser.flush()
-			time.sleep(.02)
-		ser.write(bytearray(ENTER))
+				writeCommand("DOWN")
+		writeCommand("ENTER")
 		ser.flush()
-		time.sleep(.08)
-	ser.write(bytearray(ENTER))
+		time.sleep(.1)
+	writeCommand("ENTER")
 	ser.flush()
 
 def updateChannelName():
 	# Call for Menu
-	ser.write(bytearray(MENU))
-	ser.flush()
-	time.sleep(0.05)
+	writeCommand("MENU")
+	time.sleep(0.1)
 
 	# Select Channel Input
-	ser.write(bytearray(ENTER))
-	ser.flush()
+	# Move to Name function
+	repeatCommand("DOWN", 2, skipISW=True)
+	writeCommand("ENTER")
 	time.sleep(0.1)
 
 	# Get channel to change name
 	num = int(input("Channel Number to Update: "))
-	if n == "Num0":
-		ser.write(bytearray(NUM0))
-	elif inp_str == "Num1":
-		ser.write(bytearray(NUM1))
-	elif inp_str == "Num2":
-		ser.write(bytearray(NUM2))
-	elif inp_str == "Num3":
-		ser.write(bytearray(NUM3))
-	elif inp_str == "Num4":
-		ser.write(bytearray(NUM4))
-	elif inp_str == "Num5":
-		ser.write(bytearray(NUM5))
-	elif inp_str == "Num6":
-		ser.write(bytearray(NUM6))
-	elif inp_str == "Num7":
-		ser.write(bytearray(NUM7))
-	elif inp_str == "Num8":
-		ser.write(bytearray(NUM8))
-	elif inp_str == "Num9":
-		ser.write(bytearray(NUM9))
-	ser.flush()
-	time.sleep(1)
+	channel_num = "NUM" + str(num)
+
+	writeCommand(channel_num)
+	time.sleep(3)
 
 	# Move to Name function
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
-	ser.write(bytearray(DOWN))
-	ser.flush()
-	time.sleep(0.05)
+	repeatCommand("DOWN", 6, skipISW=True)
 
-	ser.write(bytearray(Enter))
-	ser.flush()
+	writeCommand("ENTER")
+	time.sleep(0.12)
+
+	writeCommand("UP")
+
+	writeCommand("ENTER")
 	time.sleep(0.1)
-
-	ser.write(bytearray(UP))
-	ser.flush()
-	time.sleep(0.05)
 
 	writeText()
 
-
-
-
 # Writes bytes for each command
-def writeCommandBytes(inp_str):
-	#---------------------BANKS-----------------------
-	if inp_str == "IEN":
-		ser.write(bytearray(IEN))
-		return 1
-	if inp_str == "ISW":
-		ser.write(bytearray(ISW))
-		return 1
-	if inp_str == "ILE":
-		ser.write(bytearray(ILE))
-		return 1
-	if inp_str == "ICC":
-		ser.write(bytearray(ICC))
-		return 1
-	if inp_str == "IMT":
-		ser.write(bytearray(IMT))
-		return 1
-	#------------------Key Presses--------------------
-	# Not Particularly useful, all commands are seperated
-	if inp_str == "Shift":
-		ser.write(bytearray(SHIFT))
-		return 1
+def sendCommand(inp_str):
+	try:
+		command_list = HUMAN_READABLE_COMMANDS[inp_str].copy()
+	except:
+		print("Not a Valid Command")
+		return 0
 
-	# Shift-based Commands (All keys that involve the shift key)
-	if inp_str == "Overscan":
-		ser.write(bytearray(OVERSCAN_16_9))
+	command_type = command_list.pop(0)
+	if command_type == "COMMAND":
+		for command in command_list:
+			writeCommand(command)
 		return 1
-	if inp_str == "16:9":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(OVERSCAN_16_9))
-		return 1
-	if inp_str == "HorizSync":
-		ser.write(bytearray(HORIZSYNC_SYNC))
-		return 1
-	if inp_str == "Sync":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(HORIZSYNC_SYNC))
-		return 1
-	if inp_str == "VertSync":
-		ser.write(bytearray(VERTSYNC_BLUEONLY))
-		return 1
-	if inp_str == "BlueOnly":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(VERTSYNC_BLUEONLY))
-		return 1
-	if inp_str == "Mono":
-		ser.write(bytearray(MONO_RED))
-		return 1
-	if inp_str == "Red":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(MONO_RED))
-		return 1
-	if inp_str == "Aperature":
-		ser.write(bytearray(APT_GREEN))
-		return 1
-	if inp_str == "Green":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(APT_GREEN))
-		return 1
-	if inp_str == "Comb":
-		ser.write(bytearray(COMB_BLUE))
-		return 1
-	if inp_str == "Blue":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(COMB_BLUE))
-		return 1
-	if inp_str == "F1":
-		ser.write(bytearray(F1_F3))
-		return 1
-	if inp_str == "F3":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(F1_F3))
-		return 1
-	if inp_str == "F2":
-		ser.write(bytearray(F2_F4))
-		return 1
-	if inp_str == "F4":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(F2_F4))
-		return 1
-	if inp_str == "SafeArea":
-		ser.write(bytearray(SAFEAREA_ADDR))
-		return 1
-	if inp_str == "Address":
-		ser.write(bytearray(SHIFT))
-		ser.flush()
-		ser.write(bytearray(SAFEAREA_ADDR))
-		return 1
-
-	# Menu Commands
-	if inp_str == "Up":
-		ser.write(bytearray(UP))
-		return 1
-	if inp_str == "Down":
-		ser.write(bytearray(DOWN))
-		return 1
-	if inp_str == "Menu":
-		ser.write(bytearray(MENU))
-		return 1
-	if inp_str == "Enter":
-		ser.write(bytearray(ENTER))
-		return 1
-
-	# Number Commands (used in menus and for selecting channels)
-	if inp_str == "Num0":
-		ser.write(bytearray(NUM0))
-		return 1
-	if inp_str == "Num1":
-		ser.write(bytearray(NUM1))
-		return 1
-	if inp_str == "Num2":
-		ser.write(bytearray(NUM2))
-		return 1
-	if inp_str == "Num3":
-		ser.write(bytearray(NUM3))
-		return 1
-	if inp_str == "Num4":
-		ser.write(bytearray(NUM4))
-		return 1
-	if inp_str == "Num5":
-		ser.write(bytearray(NUM5))
-		return 1
-	if inp_str == "Num6":
-		ser.write(bytearray(NUM6))
-		return 1
-	if inp_str == "Num7":
-		ser.write(bytearray(NUM7))
-		return 1
-	if inp_str == "Num8":
-		ser.write(bytearray(NUM8))
-		return 1
-	if inp_str == "Num9":
-		ser.write(bytearray(NUM9))
-		return 1
-
-	# Power and Degauss Commands
-	if inp_str == "Power":
-		ser.write(bytearray(POWER))
-		ser.flush()
-		# Switch Bank to ensure all keys can be pressed
-		ser.write(bytearray(ISW))
-		return 1
-
-	if inp_str == "Degauss":
-		ser.write(bytearray(DEGAUSS))
-		return 1
-
 
 	#--------------------Encoders---------------------
 
@@ -337,80 +215,53 @@ def writeCommandBytes(inp_str):
 	# to the left by using a number greater than 128 but less than 256
 
 
-	if inp_str == "PhaseInc":
-		dif = int(input("Input Wanted Difference:")) # Ask for user input
-		bytes = [PHASE_ENC[0], PHASE_ENC[1], dif * 4] # Create array with correct format
-		ser.write(bytearray(IEN)) # Switch to encoder bank
-		ser.flush()
-		ser.write(bytearray(bytes)) # Write byte array
-		ser.flush()
-		ser.write(bytearray(ISW)) # Switch back to key bank
-		return 1
-	if inp_str == "ChromaInc":
-		dif = int(input("Input Wanted Difference:"))
-		bytes = [CHROMA_ENC[0], CHROMA_ENC[1], dif * 4]
-		ser.write(bytearray(IEN))
-		ser.flush()
-		ser.write(bytearray(bytes))
-		ser.flush()
-		ser.write(bytearray(ISW))
-		return 1
-	if inp_str == "BrightInc":
-		dif = int(input("Input Wanted Difference:"))
-		bytes = [BRIGHT_ENC[0], BRIGHT_ENC[1], dif * 4]
-		ser.write(bytearray(IEN))
-		ser.flush()
-		ser.write(bytearray(bytes))
-		ser.flush()
-		ser.write(bytearray(ISW))
-		return 1
-	if inp_str == "ContrastInc":
-		dif = int(input("Input Wanted Difference:"))
-		bytes = [CONTRAST_ENC[0], CONTRAST_ENC[1], dif * 4]
-		print(bytes)
-		ser.write(bytearray(IEN))
-		ser.flush()
-		ser.write(bytearray(bytes))
-		ser.flush()
-		ser.write(bytearray(ISW))
-		return 1
-
-	if inp_str == "Write":
-		writeText()
-		return 1
-
-
+	#if inp_str == "PhaseInc":
+	#	dif = int(input("Input Wanted Difference:")) # Ask for user input
+	#	bytes = [PHASE_ENC[0], PHASE_ENC[1], dif * 4] # Create array with correct format
+	#	ser.write(bytearray(IEN)) # Switch to encoder bank
+	#	ser.flush()
+	#	ser.write(bytearray(bytes)) # Write byte array
+	#	ser.flush()
+	#	ser.write(bytearray(ISW)) # Switch back to key bank
+	#	return 1
+	if command_type == "SCRIPT":
+		if command_list[0] == "CHANNEL_NAME":
+			updateChannelName()
+			return 1
 
 	# If the command does not fit any currently supported command, return 0
 	return 0
 
 
+if __name__ == "__main__":
 
+	print("Sony BKM-10r Emulated Controller")
+	print("Type 'help' for Info and 'exit' to Quit")
 
+	# Open Serial Port
+	ser = serial.Serial()
+	ser.baudrate = 38400
 
-# Open Serial Port
-ser = serial.Serial()
-ser.baudrate = 38400
+	#ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
 
-#ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
+	#ser.port = '/dev/ttyUSB0'
+	ser.port = 'COM9'
+	# Open Port
+	ser.open()
 
-ser.port = '/dev/ttyUSB0'
+	inp = ""
 
-# Open Port
-ser.open()
-
-inp = ""
-
-while inp != "exit":
-	inp = input(">") # Take user Input
-	if inp == "help":
-		# Create help command response
-                break
-	if inp != "exit":
-		ret = writeCommandBytes(inp) # Parse Input and send the proper write() commands
-		if ret == 1:
-			ser.flush() # Need one final Flush to send last write()
-			print("Command Successfully Sent")
-		else:
-			print("Command Failed")
-ser.close()
+	while inp != "exit":
+		inp = input(">") # Take user Input
+		if inp == "help":
+			# Create help command response
+			break
+		if inp != "exit":
+			ret = sendCommand(inp) # Parse Input and send the proper write() commands
+			if ret == 1:
+				ser.flush() # Need one final Flush to send last write()
+				print("Command Successfully Sent")
+			else:
+				print("Command Failed")
+		#print(ser.read(3))
+	ser.close()
