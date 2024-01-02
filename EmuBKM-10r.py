@@ -261,7 +261,6 @@ class EmuBKM10r:
 
 
 if __name__ == "__main__":
-
 	print("Sony BKM-10r Emulated Controller")
 	print("Type 'help' for Info and 'exit' to Quit")
 
