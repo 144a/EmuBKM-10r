@@ -3,6 +3,8 @@ A Python Module and Command Line Interface that replaces the Sony BKM-10r
 
 The EmuBKM-10R is a python script that provides a class and command line interface to those who wish to encorperate BVM control from any PC or computer. 
 
+
+
 To get started, you need to connect the BVM to a PC via serial. This can be done either create custom serial cable or getting a simple rs485 usb serial adapter.
 
 This is the serial adapter I use for simple testing purposes: https://www.amazon.com/USB-RS485-Applications-Communication-Requirement/dp/B081NBCJRS/ref=sr_1_3_pp?crid=2BP96KJD499W4&keywords=rs485+usb&qid=1704225950&sprefix=rs485%2Caps%2C121&sr=8-3
@@ -13,13 +15,19 @@ Below are the wiring diagrams for both the front "Option" din port and the DB9 c
 
 ![ScreenShot](WiringDiagram.png)
 
+
+
 After connecting the BVM to the PC, you can either run the python script as is or import the EmuBKM10r Class into any other python script. 
 
-There are two command line arguments: 
+There are two command line arguments:
+
 -p (--Port) for the port on which the USB serial device is connected
+
 -c (--Command) for a single command to be run, instead of starting up the CLI interface
 
 Example: python EmuBKM-10r.py -p COM9 -c Menu
+
+
 
 Below are the commands available currently:
 
