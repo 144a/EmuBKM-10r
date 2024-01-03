@@ -13,16 +13,14 @@ With this adapter, you will need to get a few breadboard jumper cables, such as 
 
 Below are the wiring diagrams for both the front "Option" din port and the DB9 connector on the rear of the monitor:
 
-![ScreenShot](WiringDiagram.png)
+![ScreenShot](WiringDiagram.png)  
 
 
 
-After connecting the BVM to the PC, you can either run the python script as is or import the EmuBKM10r Class into any other python script. 
+After connecting the BVM to the PC, you can either run the python script as is or import the EmuBKM10r Class into any other python script.  
 
-There are two command line arguments:
-
--p (--Port) for the port on which the USB serial device is connected
-
+There are two command line arguments:  
+-p (--Port) for the port on which the USB serial device is connected  
 -c (--Command) for a single command to be run, instead of starting up the CLI interface
 
 Example: python EmuBKM-10r.py -p COM9 -c Menu
