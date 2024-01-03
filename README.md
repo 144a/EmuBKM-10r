@@ -15,97 +15,101 @@ Below are the wiring diagrams for both the front "Option" din port and the DB9 c
 
 After connecting the BVM to the PC, you can either run the python script as is or import the EmuBKM10r Class into any other python script. 
 
+There are two command line arguments: 
+-p (--Port) for the port on which the USB serial device is connected
+-c (--Command) for a single command to be run, instead of starting up the CLI interface
+
 Below are the commands available currently:
 
-IEN: Swap to Encoder Bank
+IEN - Swap to Encoder Bank
 
-ISW: Swap to Switch Bank
+ISW - Swap to Switch Bank
 
-ILE: Swap to LED Bank
+ILE - Swap to LED Bank
 
-ICC: Unknown
+ICC - Unknown
 
-IMT: Unknown
+IMT - Unknown
 
-Shift: Shift Key
+Shift - Shift Key
 
-Overscan: Toggles Overscan Mode
+Overscan - Toggles Overscan Mode
 
-16:9: Toggles 16:9 Mode
+16 -9 - Toggles 16 -9 Mode
 
-HorizSync: Toggles Horizontal Sync Shift
+HorizSync - Toggles Horizontal Sync Shift
 
-Sync: Toggles Sync Mode
+Sync - Toggles Sync Mode
 
-VertSync: Toggles Vertical Sync Shift
+VertSync - Toggles Vertical Sync Shift
 
-BlueOnly: Toggles Blue-Gun Only 
+BlueOnly - Toggles Blue-Gun Only 
 
-Mono: Toggles Mono
+Mono - Toggles Mono
 
-Red: Toggles on/off Red Gun
+Red - Toggles on/off Red Gun
 
-Aperature: Toggles Aperature Adjustment
+Aperature - Toggles Aperature Adjustment
 
-Green: Toggles on/off Green Gun
+Green - Toggles on/off Green Gun
 
-Comb: Toggles Comb Filter for Composite/Svideo
+Comb - Toggles Comb Filter for Composite/Svideo
 
-Blue: Toggles on/off Blue Gun
+Blue - Toggles on/off Blue Gun
 
-F1: Function 1
+F1 - Function 1
 
-F3: Function 2
+F3 - Function 2
 
-F2: Function 3
+F2 - Function 3
 
-F4: Function 4
+F4 - Function 4
 
-SafeArea:  Toggles Current Safe Area Marker
+SafeArea -  Toggles Current Safe Area Marker
 
-Address: Brings up Address Menu
+Address - Brings up Address Menu
 
-Up: Presses Up Button
+Up - Presses Up Button
 
-Down: Presses Down Button
+Down - Presses Down Button
 
-Enter: Presses Enter Button
+Enter - Presses Enter Button
 
-Menu: Presses Menu Button
+Menu - Presses Menu Button
 
-Num0: Presses 0 on Number Pad
+Num0 - Presses 0 on Number Pad
 
-Num1: Presses 1 on Number Pad
+Num1 - Presses 1 on Number Pad
 
-Num2: Presses 2 on Number Pad
+Num2 - Presses 2 on Number Pad
 
-Num3: Presses 3 on Number Pad
+Num3 - Presses 3 on Number Pad
 
-Num4: Presses 4 on Number Pad
+Num4 - Presses 4 on Number Pad
 
-Num5: Presses 5 on Number Pad
+Num5 - Presses 5 on Number Pad
 
-Num6: Presses 6 on Number Pad
+Num6 - Presses 6 on Number Pad
 
-Num7: Presses 7 on Number Pad
+Num7 - Presses 7 on Number Pad
 
-Num8: Presses 8 on Number Pad
+Num8 - Presses 8 on Number Pad
 
-Num9: Presses 9 on Number Pad
+Num9 - Presses 9 on Number Pad
 
-Power: Presses Power Button
+Power - Presses Power Button
 
-Degauss: Presses Deguass Button
+Degauss - Presses Deguass Button
 
-PhaseInc: Turns Phase Knob (Not Implemented Yet)
+PhaseInc - Turns Phase Knob (Not Implemented Yet)
 
-ChromaInc: Turns Chroma Knob (Not Implemented Yet)
+ChromaInc - Turns Chroma Knob (Not Implemented Yet)
 
-BrightInc: Turns Brightness Knob (Not Implemented Yet)
+BrightInc - Turns Brightness Knob (Not Implemented Yet)
 
-ContrastInc: Turns Contrast Knob (Not Implemented Yet)
+ContrastInc - Turns Contrast Knob (Not Implemented Yet)
 
-UpdateChannelName: Channel Update Feature (CLI Only!)
+UpdateChannelName - Channel Update Feature (CLI Only!)
 
 
 
