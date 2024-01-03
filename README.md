@@ -31,95 +31,51 @@ Example: python EmuBKM-10r.py -p COM9 -c Menu
 
 Below are the commands available currently:
 
-IEN - Swap to Encoder Bank
-
-ISW - Swap to Switch Bank
-
-ILE - Swap to LED Bank
-
-ICC - Unknown
-
-IMT - Unknown
-
-Shift - Shift Key
-
-Overscan - Toggles Overscan Mode
-
-16 -9 - Toggles 16 -9 Mode
-
-HorizSync - Toggles Horizontal Sync Shift
-
-Sync - Toggles Sync Mode
-
-VertSync - Toggles Vertical Sync Shift
-
-BlueOnly - Toggles Blue-Gun Only 
-
-Mono - Toggles Mono
-
-Red - Toggles on/off Red Gun
-
-Aperature - Toggles Aperature Adjustment
-
-Green - Toggles on/off Green Gun
-
-Comb - Toggles Comb Filter for Composite/Svideo
-
-Blue - Toggles on/off Blue Gun
-
-F1 - Function 1
-
-F3 - Function 2
-
-F2 - Function 3
-
-F4 - Function 4
-
-SafeArea -  Toggles Current Safe Area Marker
-
-Address - Brings up Address Menu
-
-Up - Presses Up Button
-
-Down - Presses Down Button
-
-Enter - Presses Enter Button
-
-Menu - Presses Menu Button
-
-Num0 - Presses 0 on Number Pad
-
-Num1 - Presses 1 on Number Pad
-
-Num2 - Presses 2 on Number Pad
-
-Num3 - Presses 3 on Number Pad
-
-Num4 - Presses 4 on Number Pad
-
-Num5 - Presses 5 on Number Pad
-
-Num6 - Presses 6 on Number Pad
-
-Num7 - Presses 7 on Number Pad
-
-Num8 - Presses 8 on Number Pad
-
-Num9 - Presses 9 on Number Pad
-
-Power - Presses Power Button
-
-Degauss - Presses Deguass Button
-
-PhaseInc - Turns Phase Knob (Not Implemented Yet)
-
-ChromaInc - Turns Chroma Knob (Not Implemented Yet)
-
-BrightInc - Turns Brightness Knob (Not Implemented Yet)
-
-ContrastInc - Turns Contrast Knob (Not Implemented Yet)
-
-UpdateChannelName - Channel Update Feature (CLI Only!)
+IEN - Swap to Encoder Bank  
+ISW - Swap to Switch Bank  
+ILE - Swap to LED Bank  
+ICC - Unknown  
+IMT - Unknown  
+Shift - Shift Key  
+Overscan - Toggles Overscan Mode  
+16 -9 - Toggles 16 -9 Mode  
+HorizSync - Toggles Horizontal Sync Shift  
+Sync - Toggles Sync Mode  
+VertSync - Toggles Vertical Sync Shift  
+BlueOnly - Toggles Blue-Gun Only   
+Mono - Toggles Mono  
+Red - Toggles on/off Red Gun  
+Aperature - Toggles Aperature Adjustment  
+Green - Toggles on/off Green Gun  
+Comb - Toggles Comb Filter for Composite/Svideo  
+Blue - Toggles on/off Blue Gun  
+F1 - Function 1  
+F3 - Function 2  
+F2 - Function 3  
+F4 - Function 4  
+SafeArea -  Toggles Current Safe Area Marker  
+Address - Brings up Address Menu  
+Up - Presses Up Button  
+Down - Presses Down Button  
+Enter - Presses Enter Button  
+Menu - Presses Menu Button  
+Num0 - Presses 0 on Number Pad  
+Num1 - Presses 1 on Number Pad  
+Num2 - Presses 2 on Number Pad  
+Num3 - Presses 3 on Number Pad  
+Num4 - Presses 4 on Number Pad  
+Num5 - Presses 5 on Number Pad  
+Num6 - Presses 6 on Number Pad  
+Num7 - Presses 7 on Number Pad  
+Num8 - Presses 8 on Number Pad  
+Num9 - Presses 9 on Number Pad  
+Power - Presses Power Button  
+Degauss - Presses Deguass Button  
+PhaseInc - Turns Phase Knob (Not Implemented Yet)  
+ChromaInc - Turns Chroma Knob (Not Implemented Yet)  
+BrightInc - Turns Brightness Knob (Not Implemented Yet)  
+ContrastInc - Turns Contrast Knob (Not Implemented Yet)  
+UpdateChannelName - Channel Update Feature (CLI Only!)  
 
 
 
