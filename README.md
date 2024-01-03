@@ -19,6 +19,8 @@ There are two command line arguments:
 -p (--Port) for the port on which the USB serial device is connected
 -c (--Command) for a single command to be run, instead of starting up the CLI interface
 
+Example: python EmuBKM-10r.py -p COM9 -c Menu
+
 Below are the commands available currently:
 
 IEN - Swap to Encoder Bank
