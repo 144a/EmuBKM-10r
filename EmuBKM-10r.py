@@ -1,6 +1,7 @@
 import serial
 import io
 import time
+import argparse
 
 # Sony BKM-10r Serial Protocol
 # Link to info: https://pastebin.com/aTUWf33J
@@ -261,17 +262,39 @@ class EmuBKM10r:
 
 
 if __name__ == "__main__":
+	argParser = argparse.ArgumentParser()
+	argParser.add_argument("-p", "--port", help="Port of USB serial device")
+	argParser.add_argument("-c", "--command", help="Single Command to run")
+
+	args = argParser.parse_args()
+
+	#ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
+	if args.port is not None:
+		try:
+			bkm = EmuBKM10r(args.port)
+		except:
+			print("A non-valid port was given")
+			exit()
+	else:
+		bkm = EmuBKM10r('COM9')
+	bkm.connect() # opens serial port and connects to monitor
+
+	# Single command option
+	if args.command is not None:
+		ret = bkm.sendCommand(args.command) # Parse Input and send the proper write() commands
+		if ret == 1:
+			bkm.flush() # Need one final Flush to send last write()
+			print("Command Successfully Sent")
+		else:
+			print("Command Failed")
+		bkm.close()
+		exit()
+
 	print("Sony BKM-10r Emulated Controller")
 	print("Type 'help' for Info and 'exit' to Quit")
 
-	#ser.port = input("Enter name of device (ex. '/dev/ttyUSB0' for linux or 'COM3' for windows): ")
-
-	bkm = EmuBKM10r('COM9')
-
-	bkm.connect() # opens serial port and connects to monitor
-
+	# CLI Loop
 	inp = ""
-
 	while inp != "exit":
 		inp = input(">") # Take user Input
 		if inp == "help":
