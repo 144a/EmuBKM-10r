@@ -1,0 +1,18 @@
+# byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# virtual environment
+venv/
+env/
+
+# environment variables
+.env
+
+# macOS
+.DS_Store
+
+# windows
+Thumbs.db
+
+*.py text=auto
