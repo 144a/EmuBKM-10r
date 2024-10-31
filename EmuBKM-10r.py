@@ -58,10 +58,10 @@ COMMANDS = {
     "DEGAUSS": [0x44, 0x01, 0x20],  # Degauss Button
 
     # -------Encoders-------
-    "PHASE_ENC": [0x44, 0x03, 0x04],  # Phase Knob
-    "CHROMA_ENC": [0x44, 0x02, 0x04],  # Chroma Knob
-    "BRIGHT_ENC": [0x44, 0x01, 0x04],  # Brightness Knob
-    "CONTRAST_ENC": [0x44, 0x00, 0x04],  # Contrast Knob
+    "PHASE_ENC": [0x44, 0x03],  # Phase Knob
+    "CHROMA_ENC": [0x44, 0x02], # Chroma Knob
+    "BRIGHT_ENC": [0x44, 0x01], # Brightness Knob
+    "CONTRAST_ENC": [0x44, 0x00],  # Contrast Knob
 }
 
 HUMAN_READABLE_COMMANDS = {
@@ -248,7 +248,7 @@ class EmuBKM10r:
                 return 0
             # Multiply dif by 4 as per protocol
             dif_byte = (dif * 4) & 0xFF
-            bytes_to_send = [COMMANDS[encoder_name][0], COMMANDS[encoder_name][1], dif_byte]
+            bytes_to_send = COMMANDS[encoder_name] + [dif_byte]
             try:
                 # Switch to encoder bank (IEN)
                 self.ser.write(bytearray(COMMANDS["IEN"]))
