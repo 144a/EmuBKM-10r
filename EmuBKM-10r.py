@@ -64,6 +64,13 @@ COMMANDS = {
     "CONTRAST_ENC": [0x44, 0x00],  # Contrast Knob
 }
 
+MANUAL_COMMANDS = {
+    "PHASE_ENC": "PHASE_M",
+    "CHROMA_ENC": "CHROMA_M",
+    "BRIGHT_ENC": "BRIGHT_M",
+    "CONTRAST_ENC": "CONTRAST_M"
+}
+
 HUMAN_READABLE_COMMANDS = {
     "IEN": ["COMMAND", "IEN"],
     "ISW": ["COMMAND", "ISW"],
@@ -143,21 +150,16 @@ class EmuBKM10r:
 
     def writeCommand(self, command, skipISW=False):
         """Sends correct byte array for corresponding command"""
-        if skipISW:
+        if not skipISW:
             self.ser.write(bytearray(COMMANDS["ISW"]))
             self.ser.flush()
         self.ser.write(bytearray(COMMANDS[command]))
         self.ser.flush()
         if command == "MENU" or command == "POWER":
             time.sleep(0.50)
-        elif command == "SHIFT":
-            self.ser.write(bytearray(COMMANDS["ISW"]))
-            time.sleep(0.2)
-            self.ser.flush()
-            self.ser.write(bytearray(COMMANDS["ISW"]))
-            self.ser.flush()
         else:
             time.sleep(0.025)
+
 
     def repeatCommand(self, command, reps, skipISW=False):
         """Repeats COMMANDS N times with a 0.05 delay between"""
@@ -240,29 +242,39 @@ class EmuBKM10r:
             for command in command_list:
                 self.writeCommand(command)
             return 1
+        # Encoder command
         elif command_type == "ENCODER-SUB":
             encoder_name = command_list[0]
-            # Ask for user input
+            # Send the manual command with SHIFT pressed
+            manual_command = MANUAL_COMMANDS.get(encoder_name)
+            if manual_command:
+                # Press SHIFT keydown
+                self.writeCommand("SHIFT")
+                time.sleep(0.1)
+                # Send the manual command
+                self.writeCommand(manual_command)
+                time.sleep(0.1)
+                # Release SHIFT keyup
+                self.writeCommand("SHIFT")
+                time.sleep(0.1)  # Brief pause to ensure the manual mode is activated
+            # Proceed with encoder input as before
             try:
-                dif = int(input("Input Wanted Difference (positive for increase, negative for decrease, between -31 and 31): "))
-                if not -31 <= dif <= 31:
-                    print("Value must be between -31 and 31")
+                tick_value = int(input("Input tick value (positive for increase, negative for decrease, between -127 and 127): "))
+                if not -127 <= tick_value <= 127:
+                    print("Value must be between -127 and 127")
                     return 0
             except ValueError:
-                print("Invalid input, please enter an integer between -31 and 31")
-                return 0
-            # Multiply dif by 4 as per protocol
-            tick_value = dif * 4
-            if tick_value < -128 or tick_value > 127:
-                print("Tick value out of range after multiplication.")
+                print("Invalid input, please enter an integer between -127 and 127")
                 return 0
             try:
                 # Switch to encoder bank (IEN)
                 self.ser.write(bytearray(COMMANDS["IEN"]))
                 self.ser.flush()
                 # Prepare the encoder command
-                tick_byte = struct.pack('b', tick_value)  # Pack as signed byte
-                bytes_to_send = bytearray(COMMANDS[encoder_name]) + tick_byte
+                encoder_id = COMMANDS[encoder_name][1]
+                # Pack as signed byte
+                tick_byte = struct.pack('b', tick_value)
+                bytes_to_send = bytes([0x44, encoder_id]) + tick_byte
                 print(f"Sending bytes: {[hex(b) for b in bytes_to_send]}")
                 # Send the encoder command
                 self.ser.write(bytes_to_send)
@@ -276,6 +288,7 @@ class EmuBKM10r:
                 print(f"Error sending encoder command: {e}")
                 return 0
             return 1
+        # Script command
         elif command_type == "SCRIPT":
             if command_list[0] == "CHANNEL_NAME":
                 self.updateChannelName()
