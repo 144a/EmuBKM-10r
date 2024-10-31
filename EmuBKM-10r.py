@@ -1,5 +1,5 @@
 import serial
-import io
+import struct
 import time
 import argparse
 
@@ -120,6 +120,9 @@ class EmuBKM10r:
         self.ser = serial.Serial()
         self.ser.baudrate = baudrate
         self.ser.port = serial_port
+        self.ser.bytesize = serial.EIGHTBITS
+        self.ser.stopbits = serial.STOPBITS_ONE
+        self.ser.timeout = 1
 
     def connect(self):
         try:
@@ -139,9 +142,10 @@ class EmuBKM10r:
         self.ser.flush()
 
     def writeCommand(self, command, skipISW=False):
-        """ Sends correct byte array for corresponding command """
+        """Sends correct byte array for corresponding command"""
         if skipISW:
             self.ser.write(bytearray(COMMANDS["ISW"]))
+            self.ser.flush()
         self.ser.write(bytearray(COMMANDS[command]))
         self.ser.flush()
         if command == "MENU" or command == "POWER":
@@ -151,11 +155,12 @@ class EmuBKM10r:
             time.sleep(0.2)
             self.ser.flush()
             self.ser.write(bytearray(COMMANDS["ISW"]))
+            self.ser.flush()
         else:
             time.sleep(0.025)
 
     def repeatCommand(self, command, reps, skipISW=False):
-        """ Repeats COMMANDS N times with a 0.05 delay between """
+        """Repeats COMMANDS N times with a 0.05 delay between"""
         for i in range(reps):
             self.writeCommand(command, skipISW)
 
@@ -239,22 +244,28 @@ class EmuBKM10r:
             encoder_name = command_list[0]
             # Ask for user input
             try:
-                dif = int(input("Input Wanted Difference (positive for increase, negative for decrease, between -32 and 31): "))
-                if not -32 <= dif <= 31:
-                    print("Value must be between -32 and 31")
+                dif = int(input("Input Wanted Difference (positive for increase, negative for decrease, between -31 and 31): "))
+                if not -31 <= dif <= 31:
+                    print("Value must be between -31 and 31")
                     return 0
             except ValueError:
-                print("Invalid input, please enter an integer between -32 and 31")
+                print("Invalid input, please enter an integer between -31 and 31")
                 return 0
             # Multiply dif by 4 as per protocol
-            dif_byte = (dif * 4) & 0xFF
-            bytes_to_send = COMMANDS[encoder_name] + [dif_byte]
+            tick_value = dif * 4
+            if tick_value < -128 or tick_value > 127:
+                print("Tick value out of range after multiplication.")
+                return 0
             try:
                 # Switch to encoder bank (IEN)
                 self.ser.write(bytearray(COMMANDS["IEN"]))
                 self.ser.flush()
+                # Prepare the encoder command
+                tick_byte = struct.pack('b', tick_value)  # Pack as signed byte
+                bytes_to_send = bytearray(COMMANDS[encoder_name]) + tick_byte
+                print(f"Sending bytes: {[hex(b) for b in bytes_to_send]}")
                 # Send the encoder command
-                self.ser.write(bytearray(bytes_to_send))
+                self.ser.write(bytes_to_send)
                 self.ser.flush()
                 # Switch back to key bank (ISW)
                 self.ser.write(bytearray(COMMANDS["ISW"]))
